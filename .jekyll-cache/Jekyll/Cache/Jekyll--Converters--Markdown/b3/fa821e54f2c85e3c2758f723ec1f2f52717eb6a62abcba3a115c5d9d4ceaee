@@ -1,4 +1,4 @@
-I"�<h2 id="什么是长连接">什么是长连接：</h2>
+I"<h2 id="什么是长连接">什么是长连接：</h2>
 
 <p>在http/1.0版本中默认使用短连接</p>
 
@@ -16,7 +16,7 @@
 
 <p>TCP提供的是面向连接的服务，在传输数据之间必须要先建立连接，传输数据完毕之后，需要释放连接。TCP提供可靠的交付，常用与：文件传输，接收，远程登录等</p>
 
-<p><img src="/img/长连接1.png" alt="12" /></p>
+<p><img src="/muyunr.github.io/img/长连接1.png" alt="12" /></p>
 
 <h4 id="序号序列号">序号/序列号：</h4>
 
@@ -52,7 +52,7 @@
 
 <h2 id="tcp三次握手">TCP三次握手</h2>
 
-<p><img src="/img/长连接2.png" alt="长链接2" /></p>
+<p><img src="/muyunr.github.io/img/长连接2.png" alt="长链接2" /></p>
 
 <h4 id="syn-sent">SYN-SENT：</h4>
 
