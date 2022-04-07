@@ -1,8 +1,8 @@
 
 title: 暮云
 description: 这是一个开源的，仅用于学习与交流的普通的个人博客，不做任何商业用途
-baseurl: muyunr.github.io
-url: "https:/" # the base hostname & protocol for your site, e.g. http://example.com
+baseurl: 
+url: "https://muyunr.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 
 #-------------------------------
