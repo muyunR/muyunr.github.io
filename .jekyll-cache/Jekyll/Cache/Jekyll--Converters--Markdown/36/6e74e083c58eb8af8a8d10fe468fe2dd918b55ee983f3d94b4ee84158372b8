@@ -1,0 +1,45 @@
+I"4<h2 id="什么是xpath">什么是xpath：</h2>
+
+<p>XPath 是一门在 XML 文档中查找信息的语言。XPath 用于在 XML 文档中通过元素和属性进行导航。</p>
+
+<ul>
+  <li>XPath 使用路径表达式在 XML 文档中进行导航</li>
+  <li>XPath 包含一个标准函数库</li>
+  <li>XPath 是 XSLT 中的主要元素</li>
+  <li>XPath 是一个 W3C 标准</li>
+</ul>
+
+<h2 id="python中xpath的使用">python中xpath的使用：</h2>
+
+<p>安装:pip install lxml</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 1、导入模块
+</span><span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="n">ertrr</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">etree</span>
+
+<span class="c1"># 2、etree.HTML()将字符串转换成HTML元素对象，可以自动补全缺失的标签
+</span><span class="n">html</span> <span class="o">=</span> <span class="n">etree</span><span class="p">.</span><span class="n">HTML</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+
+<span class="c1"># /text()获取标签之间的内容
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//book/title/text()'</span><span class="p">)</span>
+
+<span class="c1"># 谓语，使用[ ]  可以理解为条件
+# [n]代表获取第n个元素
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//book[2]/title/text()'</span><span class="p">)</span> <span class="c1"># 获取第二个book中的内容
+</span>
+<span class="c1"># last()  获取最后一个
+# last()-1  获取倒数第二个
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">spath</span><span class="p">(</span><span class="s">'//book[last()]/title/text'</span><span class="p">)</span> <span class="c1"># 获取最后一个book中的内容
+</span>
+<span class="c1"># position() 范围
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//book[position()&gt;3]/title/text()'</span><span class="p">)</span> <span class="c1"># 获取第三个book之后的内容
+</span>
+<span class="c1"># 属性相关使用@
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//book/title[@class="cng"]/text()'</span><span class="p">)</span> <span class="c1"># 获取class值为cng的title标签的内容
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//book/title[@src]/text()'</span><span class="p">)</span> <span class="c1"># 获取含有src属性的title标签的内容
+</span>
+<span class="c1"># 获取属性值  /@属性名
+</span><span class="n">title</span> <span class="o">=</span> <span class="n">html</span><span class="p">.</span><span class="n">xpath</span><span class="p">(</span><span class="s">'//book/title/@scr'</span><span class="p">)</span> <span class="c1"># 获取title标签中src属性的值
+</span></code></pre></div></div>
+
+:ET
