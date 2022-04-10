@@ -1,4 +1,4 @@
-I"P<h2 id="什么是selenium">什么是selenium：</h2>
+I"@4<h2 id="什么是selenium">什么是selenium：</h2>
 
 <p>Selenium是一个用于Web应用程序测试的工具。Selenium测试直接运行在浏览器中，就像真正的用户在操作一样。这个工具的主要功能包括：测试与浏览器的兼容性——测试应用程序看是否能够很好得工作在不同浏览器和操作系统之上。测试系统功能——创建回归测试检验软件功能和用户需求。</p>
 
@@ -65,4 +65,60 @@
 
 <p>这样就可以使用最新的selenium来调用PHANTOMJS了，但是经过测试发现，driver.find_element(By.ID, ‘kw’)，应该返回的是WebElement类型，但是以这种方式强行使用phantomjs，会返回一个dict类型，导致点击，输入等操作会报错，目前没有解决方案，使用chromedriver时版本与本机浏览器不一致时也会出现这样的问题，下载新版的chromedriver就可以解决，但是phantomjs已经停止更新</p>
 
+<p>建议使用谷歌等浏览器，现谷歌、火狐也以支持配置无界面浏览器</p>
+
+<h2 id="selenium结合chrome浏览器">selenium结合chrome浏览器</h2>
+
+<p>需要先下载谷歌的驱动 ：http://chromedriver.storage.googleapis.com/index.html，选择与自己谷歌浏览器大版本一致的下载就可以</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 导入
+</span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="c1"># 调用浏览器
+</span><span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="sa">r</span><span class="s">'/User/chromedriver'</span><span class="p">)</span>
+<span class="c1"># 访问
+</span><span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<span class="c1"># 最大化窗口
+</span><span class="n">driver</span><span class="p">.</span><span class="n">maxmize_window</span><span class="p">()</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 导入配置
+</span><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="c1"># 配置无界面浏览器
+</span><span class="n">options</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'--headless'</span><span class="p">)</span>
+<span class="c1"># 配置手机浏览器
+</span><span class="n">options</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">'user-agent="Mozilla/5.0 (Linux; U; Android 8.1.0; zh-cn; BLA-AL00 Build/HUAWEIBLA-AL00) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/57.0.2987.132 MQQBrowser/8.9 Mobile Safari/537.36"'</span><span class="p">)</span> <span class="c1"># 这里随便从网上找一个手机浏览器的请求头就可以
+# 启动开发者模式
+</span><span class="n">options</span><span class="p">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s">'excludeSwitches'</span><span class="p">,[</span><span class="s">'enable-automation'</span><span class="p">])</span>
+<span class="n">options</span><span class="p">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s">'useAutomationExtension'</span><span class="p">,</span><span class="s">'False'</span><span class="p">)</span>
+<span class="c1"># 调用浏览器
+</span><span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">executable_path</span><span class="o">=</span><span class="sa">r</span><span class="s">'/User/chromedriver'</span><span class="p">,</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h2 id="selenium反爬处理">selenium反爬处理</h2>
+
+<p>现在好多页面都针对selenium进行了反爬操作，用普通浏览器的Console中输入window.navigator.webdriver,会返回一个false或者undefined,而使用web driver打开的浏览器则会返回true，我们需要做的就是将返回值变成false即可</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">execute_cdp_cmd</span><span class="p">(</span>   <span class="s">'Page.addScriptToEvaluateOnNewDocument'</span><span class="p">,{</span>    <span class="s">'source'</span><span class="p">:</span><span class="s">'Object.defineProperty(navigator,"webdriver",{get:()=&gt;undefined})'</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>将这段代码放到请求之前，即可</p>
+
+<p>这种方法只能处理针对wendriver的反爬，如果有其他的就处理不了了，建议使用</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./stealth.min.js'</span><span class="p">,</span><span class="s">'r'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">fp</span><span class="p">.</span><span class="n">read</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">execute_cdp_cmd</span><span class="p">(</span>
+    <span class="s">'Page.addScriptToEvaluateOnNewDocument'</span><span class="p">,{</span>
+        <span class="s">'source'</span><span class="p">:</span><span class="n">content</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div></div>
+
+<p>stealth.min.js文件已放到GitHub库中，需要的朋友自取</p>
+
+<p>https://github.com/muyunR/python-project</p>
 :ET

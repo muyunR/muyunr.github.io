@@ -1,0 +1,155 @@
+I"G<p>滑块验证码是生活中非常常见的一种验证方式，在爬虫过程中如果遇到改怎么解决呢？当然我们可以手动划过去再执行下面的代码，但是这样不符合我们效率至上的原则。</p>
+
+<h2 id="破解思路">破解思路：</h2>
+
+<p>使用selenium模拟人为的操作，将滑块移动到指定的位置，然后松开鼠标</p>
+
+<h2 id="核心思路">核心思路：</h2>
+
+<p>计算出移动的距离</p>
+
+<h3 id="怎么计算">怎么计算：</h3>
+
+<p>找到无缺口的图片，对比两张图片，通过求出图片中每一个点的颜色的RGB值，找出缺口位置</p>
+
+<h2 id="大致过程">大致过程：</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">selenium</span> <span class="k">from</span> <span class="n">webdriver</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">插件位置</span><span class="p">)</span>
+<span class="c1"># 最大化窗口，方便定位图片
+</span><span class="n">driver</span><span class="p">.</span><span class="n">maxmize_window</span><span class="p">()</span>
+<span class="c1"># 截图，获取有缺口的图片
+</span><span class="n">driver</span><span class="p">.</span><span class="n">save_scerrnshot</span><span class="p">(</span><span class="s">'quekou.png'</span><span class="p">)</span>
+<span class="c1"># 通过获取图片元素来准准确定位图片
+</span><span class="n">ele</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="p">.</span><span class="n">XPATH</span><span class="p">,</span><span class="s">'xpath路径'</span><span class="p">)</span>
+<span class="c1"># 根据图片元素位置进行局部截图
+# 目的：为了方便对比RGB值，需要将最左边的拼图块截掉，以免对后面的对比造成干扰
+</span><span class="n">left</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'x'</span><span class="p">]</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'x'</span><span class="p">]</span> <span class="o">+</span> <span class="n">ele</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="s">'width'</span><span class="p">]</span>
+<span class="n">top</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'y'</span><span class="p">]</span>
+<span class="n">bottom</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'y'</span><span class="p">]</span> <span class="o">+</span> <span class="n">ele</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span>
+<span class="c1"># 打开之前截取的整页图片
+# 这里用到PIL模块
+</span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'quanbu.png'</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">crop</span><span class="p">((</span><span class="n">left</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">110</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">right</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># 注意win设备不需要*2
+# 保存图片
+</span><span class="n">im</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="s">'wuque_jubu.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="找到完整图片">找到完整图片：</h3>
+
+<p>这样我们就获得了带缺口的局部截图，接下来就是要找到完整的图片，一般两个标签会离的很近</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 找出无缺口的图片
+# 执行js
+</span><span class="n">driver</span><span class="p">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s">'document.getElementsByClassName("这里输入class的值")[0].style="display:block"'</span><span class="p">)</span>
+<span class="c1"># 截图
+</span><span class="n">driver</span><span class="p">.</span><span class="n">save_screenshot</span><span class="p">(</span><span class="s">'wuque.png'</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'wuque.png'</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">crop</span><span class="p">((</span><span class="n">left</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">110</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">right</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># 同理，Mac*2，win不需要
+</span><span class="n">im</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="s">'wuque_jubu.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>这样我们就获得了有缺口和没有缺口的两证图片，并且两张图片大小完全一致，方便我们后面的比较</p>
+
+<h3 id="定义计算距离的函数及判断相似的函数">定义计算距离的函数及判断相似的函数</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 定义计算距离的函数
+</span><span class="k">def</span> <span class="nf">get_difference</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span><span class="n">image2</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image1</span><span class="p">.</span><span class="n">width</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image1</span><span class="p">.</span><span class="n">height</span><span class="p">):</span>
+      <span class="k">if</span>  <span class="n">is_similar</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span><span class="n">image2</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">i</span>
+<span class="c1"># 定义判断相似的函数
+</span><span class="k">def</span> <span class="nf">is_similar</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span><span class="n">image2</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+  <span class="c1"># 计算每一个点在对应图片中的rgb值，判断是否缺口
+</span>  <span class="c1"># 计算RGB值的方法
+</span>  <span class="n">pixel1</span> <span class="o">=</span> <span class="n">image1</span><span class="p">.</span><span class="n">getpixel</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+  <span class="n">pixel2</span> <span class="o">=</span> <span class="n">image2</span><span class="p">.</span><span class="n">getpixel</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+  <span class="c1"># 找出缺口
+</span>  <span class="c1"># 需要设置一个容差范围，如果超出这个范围为缺口，否则不是缺口
+</span>    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pixel1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pixel2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pixel1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pixel2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pixel1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">pixel2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>接下来就调用定义好的函数来计算移动距离</p>
+
+<h3 id="计算移动距离">计算移动距离</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">im1</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'wuque_jubu.png'</span><span class="p">)</span>
+<span class="n">im2</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'quekou_jubu.png'</span><span class="p">)</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="n">get_difference</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>然后找到滑块按钮，开始移动滑块就好</p>
+
+<h3 id="开始移动滑块">开始移动滑块</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">huakuai</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="p">.</span><span class="n">XPATH</span><span class="p">,</span><span class="s">'xpath路径'</span><span class="p">)</span>
+<span class="c1"># 按住滑块并保持不动
+# 这里需要导入selenium的动作链
+</span><span class="kn">from</span> <span class="nn">selenium.webdriver.common.action_chains</span> <span class="kn">import</span> <span class="n">ActionChains</span>
+
+<span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">click_and_hold</span><span class="p">(</span><span class="n">on_element</span><span class="o">=</span><span class="n">huakuai</span><span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+
+<span class="c1"># 滑动滑块
+</span><span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">move_by_offset</span><span class="p">(</span><span class="n">xoffset</span><span class="o">=</span><span class="p">(</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">55</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">yoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+
+<span class="c1"># 松开鼠标
+</span><span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">release</span><span class="p">().</span><span class="n">perform</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>但是，程序移动滑块的速度是非常快的，直接就闪现过去了，一般是成功不了的，正常网页都会有判断，速度过快时无法通过的，这里就需要用到物理的加速运动了，我们让程序来做匀加匀减速运动，本人身为一个物理黑洞，只能拿大佬定义好的来用了…….</p>
+
+<h3 id="定义计算运动轨迹的函数">定义计算运动轨迹的函数</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">get_distance</span><span class="p">(</span><span class="n">distance</span><span class="p">):</span>
+    <span class="s">"""
+    x = v0*t + 1/2 * a * t ** 2
+    v = v0 + a * t
+    """</span>
+    <span class="c1"># 定义单位时间
+</span>    <span class="n">t</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="c1"># 定义初速度
+</span>    <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># 定义存放运动轨迹的容器
+</span>    <span class="n">distance_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># 定义匀加速和匀减速的分界线
+</span>    <span class="n">mid</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mf">0.8</span>
+    <span class="c1"># 定义当前位移
+</span>    <span class="n">current</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">distance</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">:</span>
+            <span class="c1"># 匀加速运动
+</span>            <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 匀减速运动
+</span>            <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+        <span class="c1"># 计算位移
+</span>        <span class="n">x</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">t</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">current</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="c1"># 计算末速度
+</span>        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">distance_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">distance_list</span>
+</code></pre></div></div>
+
+<p>然后我们需要在松开鼠标之前加入模拟先加速后减速的运动</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 利用物理加速度，模拟出先加速后减速的运动
+</span><span class="n">distance_list</span> <span class="o">=</span> <span class="n">get_distance</span><span class="p">((</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">55</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.4</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">distance_list</span><span class="p">:</span>
+ <span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">move_by_offset</span><span class="p">(</span><span class="n">xoffset</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">yoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="总结">总结:</h3>
+
+<p>这就是本人总结的破解滑块验证码的具体思路了，但是在很多网站都会针对进行检测，成功率较低，需要不断的实验来调整程序滑动的运动轨迹来减少被检测的几率</p>
+:ET

@@ -6,10 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>关于</title>
+  <title>滑块验证码</title>
   <meta name='description' content='这是一个开源的，仅用于学习与交流的普通的个人博客，不做任何商业用途'>
 
-  <link rel="canonical" href="http://localhost:4000/%E5%85%B3%E4%BA%8E/">
+  <link rel="canonical" href="http://localhost:4000/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/">
   <link rel="alternate" type="application/rss+xml" title="暮云" href="/feed.xml">
 
   <!-- Google Font -->
@@ -100,22 +100,363 @@
       <div class="container">
 	<div class="row">
 		<div class="col col-12">
-			<div class="page-image-box">
-				<div class="page-image" style="background-image: url(/img/08.jpg)"></div>
+			<div class="post-image-box">
+				<div class="post-image" style="background-image: url(/img/06.jpg)"></div>
 			</div>
 		</div>
-		<article class="col col-12 col-t-10 push-t-1 page">
-			<div class="page-content">
-				<div class="page-head">
-					<h1 class="page-title">关于</h1>
-				</div>
+	</div>
+</div>
 
-				<div class="page-body">
+<div class="container">
+	<div class="row">
+		<article class="col col-12 col-t-8 post">
+			<div class="post-content">
+
+				<div class="post-head">
 					
-
+					<div class="post-tag">
+						
+						<a href="/tags#爬虫" class="tag">爬虫</a>
+						
+					</div>
+					
+					<h1 class="post-title">滑块验证码</h1>
+					<div class="post-info">
+						<div class="post-info-author">
+							<div class="info-author-avatar" style="background-image: url(/img/09.jpg)"></div>
+							<span>by</span>
+							<span class="info-author-name">暮云</span>
+						</div>
+						<div class="post-date">
+							<span>
+								<time datetime="2022-04-10T00:00:00+08:00">Apr 10, 2022</time>
+							</span>
+						</div>
+					</div>
 				</div>
+
+				<div class="post-body">
+					<p>滑块验证码是生活中非常常见的一种验证方式，在爬虫过程中如果遇到改怎么解决呢？当然我们可以手动划过去再执行下面的代码，但是这样不符合我们效率至上的原则。</p>
+
+<h2 id="破解思路">破解思路：</h2>
+
+<p>使用selenium模拟人为的操作，将滑块移动到指定的位置，然后松开鼠标</p>
+
+<h2 id="核心思路">核心思路：</h2>
+
+<p>计算出移动的距离</p>
+
+<h3 id="怎么计算">怎么计算：</h3>
+
+<p>找到无缺口的图片，对比两张图片，通过求出图片中每一个点的颜色的RGB值，找出缺口位置</p>
+
+<h2 id="大致过程">大致过程：</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">selenium</span> <span class="k">from</span> <span class="n">webdriver</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">插件位置</span><span class="p">)</span>
+<span class="c1"># 最大化窗口，方便定位图片
+</span><span class="n">driver</span><span class="p">.</span><span class="n">maxmize_window</span><span class="p">()</span>
+<span class="c1"># 截图，获取有缺口的图片
+</span><span class="n">driver</span><span class="p">.</span><span class="n">save_scerrnshot</span><span class="p">(</span><span class="s">'quekou.png'</span><span class="p">)</span>
+<span class="c1"># 通过获取图片元素来准准确定位图片
+</span><span class="n">ele</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="p">.</span><span class="n">XPATH</span><span class="p">,</span><span class="s">'xpath路径'</span><span class="p">)</span>
+<span class="c1"># 根据图片元素位置进行局部截图
+# 目的：为了方便对比RGB值，需要将最左边的拼图块截掉，以免对后面的对比造成干扰
+</span><span class="n">left</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'x'</span><span class="p">]</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'x'</span><span class="p">]</span> <span class="o">+</span> <span class="n">ele</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="s">'width'</span><span class="p">]</span>
+<span class="n">top</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'y'</span><span class="p">]</span>
+<span class="n">bottom</span> <span class="o">=</span> <span class="n">ele</span><span class="p">.</span><span class="n">location</span><span class="p">[</span><span class="s">'y'</span><span class="p">]</span> <span class="o">+</span> <span class="n">ele</span><span class="p">.</span><span class="n">size</span><span class="p">[</span><span class="s">'height'</span><span class="p">]</span>
+<span class="c1"># 打开之前截取的整页图片
+# 这里用到PIL模块
+</span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'quanbu.png'</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">crop</span><span class="p">((</span><span class="n">left</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">110</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">right</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># 注意win设备不需要*2
+# 保存图片
+</span><span class="n">im</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="s">'wuque_jubu.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<h3 id="找到完整图片">找到完整图片：</h3>
+
+<p>这样我们就获得了带缺口的局部截图，接下来就是要找到完整的图片，一般两个标签会离的很近</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 找出无缺口的图片
+# 执行js
+</span><span class="n">driver</span><span class="p">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s">'document.getElementsByClassName("这里输入class的值")[0].style="display:block"'</span><span class="p">)</span>
+<span class="c1"># 截图
+</span><span class="n">driver</span><span class="p">.</span><span class="n">save_screenshot</span><span class="p">(</span><span class="s">'wuque.png'</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'wuque.png'</span><span class="p">)</span>
+<span class="n">im</span> <span class="o">=</span> <span class="n">im</span><span class="p">.</span><span class="n">crop</span><span class="p">((</span><span class="n">left</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">110</span><span class="p">,</span> <span class="n">top</span> <span class="o">*</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">10</span><span class="p">,</span> <span class="n">right</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">*</span> <span class="mi">2</span><span class="p">))</span>
+<span class="c1"># 同理，Mac*2，win不需要
+</span><span class="n">im</span><span class="p">.</span><span class="n">save</span><span class="p">(</span><span class="s">'wuque_jubu.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>这样我们就获得了有缺口和没有缺口的两证图片，并且两张图片大小完全一致，方便我们后面的比较</p>
+
+<h3 id="定义计算距离的函数及判断相似的函数">定义计算距离的函数及判断相似的函数</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 定义计算距离的函数
+</span><span class="k">def</span> <span class="nf">get_difference</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span><span class="n">image2</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image1</span><span class="p">.</span><span class="n">width</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">image1</span><span class="p">.</span><span class="n">height</span><span class="p">):</span>
+      <span class="k">if</span>  <span class="n">is_similar</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span><span class="n">image2</span><span class="p">,</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">i</span>
+<span class="c1"># 定义判断相似的函数
+</span><span class="k">def</span> <span class="nf">is_similar</span><span class="p">(</span><span class="n">image1</span><span class="p">,</span><span class="n">image2</span><span class="p">,</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
+  <span class="c1"># 计算每一个点在对应图片中的rgb值，判断是否缺口
+</span>  <span class="c1"># 计算RGB值的方法
+</span>  <span class="n">pixel1</span> <span class="o">=</span> <span class="n">image1</span><span class="p">.</span><span class="n">getpixel</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+  <span class="n">pixel2</span> <span class="o">=</span> <span class="n">image2</span><span class="p">.</span><span class="n">getpixel</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+  <span class="c1"># 找出缺口
+</span>  <span class="c1"># 需要设置一个容差范围，如果超出这个范围为缺口，否则不是缺口
+</span>    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pixel1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">pixel2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pixel1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">pixel2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span> <span class="ow">and</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pixel1</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">pixel2</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">30</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>接下来就调用定义好的函数来计算移动距离</p>
+
+<h3 id="计算移动距离">计算移动距离</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">im1</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'wuque_jubu.png'</span><span class="p">)</span>
+<span class="n">im2</span> <span class="o">=</span> <span class="n">Image</span><span class="p">.</span><span class="nb">open</span><span class="p">(</span><span class="s">'quekou_jubu.png'</span><span class="p">)</span>
+<span class="n">distance</span> <span class="o">=</span> <span class="n">get_difference</span><span class="p">(</span><span class="n">im1</span><span class="p">,</span> <span class="n">im2</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>然后找到滑块按钮，开始移动滑块就好</p>
+
+<h3 id="开始移动滑块">开始移动滑块</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">huakuai</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_element</span><span class="p">(</span><span class="n">By</span><span class="p">.</span><span class="n">XPATH</span><span class="p">,</span><span class="s">'xpath路径'</span><span class="p">)</span>
+<span class="c1"># 按住滑块并保持不动
+# 这里需要导入selenium的动作链
+</span><span class="kn">from</span> <span class="nn">selenium.webdriver.common.action_chains</span> <span class="kn">import</span> <span class="n">ActionChains</span>
+
+<span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">click_and_hold</span><span class="p">(</span><span class="n">on_element</span><span class="o">=</span><span class="n">huakuai</span><span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+
+<span class="c1"># 滑动滑块
+</span><span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">move_by_offset</span><span class="p">(</span><span class="n">xoffset</span><span class="o">=</span><span class="p">(</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">55</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.6</span><span class="p">,</span> <span class="n">yoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+
+<span class="c1"># 松开鼠标
+</span><span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">release</span><span class="p">().</span><span class="n">perform</span><span class="p">()</span>
+
+</code></pre></div></div>
+
+<p>但是，程序移动滑块的速度是非常快的，直接就闪现过去了，一般是成功不了的，正常网页都会有判断，速度过快时无法通过的，这里就需要用到物理的加速运动了，我们让程序来做匀加匀减速运动，本人身为一个物理黑洞，只能拿大佬定义好的来用了…….</p>
+
+<h3 id="定义计算运动轨迹的函数">定义计算运动轨迹的函数</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">def</span> <span class="nf">get_distance</span><span class="p">(</span><span class="n">distance</span><span class="p">):</span>
+    <span class="s">"""
+    x = v0*t + 1/2 * a * t ** 2
+    v = v0 + a * t
+    """</span>
+    <span class="c1"># 定义单位时间
+</span>    <span class="n">t</span> <span class="o">=</span> <span class="mf">0.3</span>
+    <span class="c1"># 定义初速度
+</span>    <span class="n">v</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="c1"># 定义存放运动轨迹的容器
+</span>    <span class="n">distance_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="c1"># 定义匀加速和匀减速的分界线
+</span>    <span class="n">mid</span> <span class="o">=</span> <span class="n">distance</span> <span class="o">*</span> <span class="mf">0.8</span>
+    <span class="c1"># 定义当前位移
+</span>    <span class="n">current</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">distance</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">current</span> <span class="o">&lt;</span> <span class="n">mid</span><span class="p">:</span>
+            <span class="c1"># 匀加速运动
+</span>            <span class="n">a</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># 匀减速运动
+</span>            <span class="n">a</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span>
+        <span class="c1"># 计算位移
+</span>        <span class="n">x</span> <span class="o">=</span> <span class="n">v</span> <span class="o">*</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a</span> <span class="o">*</span> <span class="n">t</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">current</span> <span class="o">+=</span> <span class="n">x</span>
+        <span class="c1"># 计算末速度
+</span>        <span class="n">v</span> <span class="o">=</span> <span class="n">v</span> <span class="o">+</span> <span class="n">a</span> <span class="o">*</span> <span class="n">t</span>
+        <span class="n">distance_list</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">distance_list</span>
+</code></pre></div></div>
+
+<p>然后我们需要在松开鼠标之前加入模拟先加速后减速的运动</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 利用物理加速度，模拟出先加速后减速的运动
+</span><span class="n">distance_list</span> <span class="o">=</span> <span class="n">get_distance</span><span class="p">((</span><span class="n">distance</span> <span class="o">+</span> <span class="mi">55</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.4</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">distance_list</span><span class="p">:</span>
+ <span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">).</span><span class="n">move_by_offset</span><span class="p">(</span><span class="n">xoffset</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">yoffset</span><span class="o">=</span><span class="mi">0</span><span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h3 id="总结">总结:</h3>
+
+<p>这就是本人总结的破解滑块验证码的具体思路了，但是在很多网站都会针对进行检测，成功率较低，需要不断的实验来调整程序滑动的运动轨迹来减少被检测的几率</p>
+
+
+					<div class="post-share">
+						<ul class="share-list list-reset">
+							<li class="share-item">
+								<a class="share-facebook" href="https://www.facebook.com/sharer/sharer.php?u=http://localhost:4000/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/"
+								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+								title="Share on Facebook" rel="nofollow">
+									<i class="ion ion-logo-facebook"></i>
+								</a>
+							</li>
+					
+							<li class="share-item">
+								<a class="share-twitter" href="https://twitter.com/intent/tweet?text=%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81&url=http://localhost:4000/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/"
+								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+								title="Share on Twitter" rel="nofollow">
+									<i class="ion ion-logo-twitter"></i>
+								</a>
+							</li>
+					
+							<li class="share-item">
+								<a class="share-linkedin" href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/&title=%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81&summary=&source=%E6%9A%AE%E4%BA%91"
+								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;"
+								title="Share on LinkedIn" rel="nofollow">
+									<i class="ion ion-logo-linkedin"></i>
+								</a>
+							</li>
+					
+							<li class="share-item">
+								<a class="share-pinterest" href="http://pinterest.com/pin/create/button/?url=http://localhost:4000/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/&amp;media=http://localhost:4000/img/06.jpg&amp;description=%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81"
+								onclick="window.open(this.href, 'pop-up', 'left=20,top=20,width=900,height=500,toolbar=1,resizable=0'); return false;"
+								title="Share on Pinterest" rel="nofollow">
+									<i class="ion ion-logo-pinterest"></i>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="post-navigation">
+					
+					<a href="/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" class="prev">
+						<div class="post-nav-arrow"><i class="ion ion-ios-arrow-round-back"></i> 上一篇</div>
+						<h2 class="post-nav-title">正则表达式</h2>
+					</a>
+					 
+				</div>
+
 			</div>
-		</article> <!-- /.page -->
+	</article> <!-- /.post -->
+
+	<div class="col col-12 col-t-4">
+		<aside class="sidebar">
+  
+  
+  <div class="widget widget-recent">
+    <h3 class="widget-title">最近的帖子</h3>
+    
+    <div class="recent-posts">
+      
+      <div class="recent-header">
+        <a class="recent-image" href="/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/" style="background-image: url(/img/06.jpg)"></a>
+      </div>
+      
+      <div class="recent-content">
+        <h6 class="recent-title"><a href="/%E6%BB%91%E5%9D%97%E9%AA%8C%E8%AF%81%E7%A0%81/">滑块验证码</a></h6>
+        <div class="recent-date">
+          <time datetime="2022-04-10T00:00:00+08:00">April 10, 2022</time>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-posts">
+      
+      <div class="recent-header">
+        <a class="recent-image" href="/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="background-image: url(/img/03.jpg)"></a>
+      </div>
+      
+      <div class="recent-content">
+        <h6 class="recent-title"><a href="/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a></h6>
+        <div class="recent-date">
+          <time datetime="2022-04-08T00:00:00+08:00">April 8, 2022</time>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-posts">
+      
+      <div class="recent-header">
+        <a class="recent-image" href="/xpath%E7%9A%84%E4%BD%BF%E7%94%A8/" style="background-image: url(/img/04.jpg)"></a>
+      </div>
+      
+      <div class="recent-content">
+        <h6 class="recent-title"><a href="/xpath%E7%9A%84%E4%BD%BF%E7%94%A8/">xpath</a></h6>
+        <div class="recent-date">
+          <time datetime="2022-04-08T00:00:00+08:00">April 8, 2022</time>
+        </div>
+      </div>
+    </div>
+    
+    <div class="recent-posts">
+      
+      <div class="recent-header">
+        <a class="recent-image" href="/selenium/" style="background-image: url(/img/05.jpg)"></a>
+      </div>
+      
+      <div class="recent-content">
+        <h6 class="recent-title"><a href="/selenium/">selenium的使用</a></h6>
+        <div class="recent-date">
+          <time datetime="2022-04-08T00:00:00+08:00">April 8, 2022</time>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+
+  <div class="widget widget-social">
+    <h3 class="widget-title">订阅和关注</h3>
+    <ul class="social-profiles list-reset">
+      
+      <li class="social-profiles-item">
+        <a href="https://facebook.com/" class="social-profiles-link"><i class="ion ion-logo-facebook"></i></a>
+      </li>
+      
+
+       
+      <li class="social-profiles-item">
+        <a href="https://twitter.com/" class="social-profiles-link"><i class="ion ion-logo-twitter"></i></a>
+      </li>
+      
+
+      
+      <li class="social-profiles-item">
+        <a href="https://www.instagram.com/" class="social-profiles-link"><i class="ion ion-logo-instagram"></i></a>
+      </li>
+      
+
+      
+      <li class="social-profiles-item">
+        <a href="https://www.pinterest.com/" class="social-profiles-link"><i class="ion ion-logo-pinterest"></i></a>
+      </li>
+      
+    </ul>
+  </div>
+
+  <div class="widget widget-newsletter">
+    <h3 class="widget-title">Newsletter</h3>
+    <div class="newsletter-subtitle">获取有趣的新闻</div>
+    <div class="newsletter-text">通过电子邮件接收新消息</div>
+    <form class="c-newsletter-form validate" action="#" method="POST"
+      id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" novalidate>
+      <div class="newsletter-group">
+        <div class="newsletter-group-top">
+          <label class="screen-reader-text" for="mce-EMAIL">Email address</label>
+          <i class="email-icon ion ion-ios-mail"></i>
+          <input class="newsletter-email required email" id="mce-EMAIL" type="text" name="EMAIL" placeholder="E-mail">
+        </div>
+        <input class="newsletter-button" id="mc-embedded-subscribe" type="submit" name="subscribe" value="Subscribe">
+      </div>
+    </form>
+  </div>
+  
+</aside> <!-- /.sidebar -->
+
+	</div>
+
 	</div>
 </div>
 
