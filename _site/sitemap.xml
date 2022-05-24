@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
-<loc>http://localhost:4000/%E5%85%B3%E4%BA%8Ecookie/</loc>
-<lastmod>2022-04-07T00:00:00+08:00</lastmod>
+<loc>http://localhost:4000/%E9%95%BF%E8%BF%9E%E6%8E%A5/</loc>
+<lastmod>2022-02-18T02:20:32+08:00</lastmod>
 </url>
 <url>
-<loc>http://localhost:4000/%E9%95%BF%E8%BF%9E%E6%8E%A5/</loc>
+<loc>http://localhost:4000/%E5%85%B3%E4%BA%8Ecookie/</loc>
 <lastmod>2022-04-07T00:00:00+08:00</lastmod>
 </url>
 <url>
@@ -25,6 +25,14 @@
 <lastmod>2022-04-10T00:00:00+08:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/python%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/</loc>
+<lastmod>2022-04-22T00:00:00+08:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/pd%E5%AE%89%E8%A3%85centos/</loc>
+<lastmod>2022-05-22T00:00:00+08:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/</loc>
 </url>
 <url>
@@ -32,5 +40,8 @@
 </url>
 <url>
 <loc>http://localhost:4000/%E5%85%B3%E4%BA%8E/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/page/2/</loc>
 </url>
 </urlset>

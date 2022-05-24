@@ -1,0 +1,172 @@
+I"N<h2 id="前言">前言：</h2>
+
+<p>使用天翼云盘下载，不限速，其它渠道，下载的镜像都无法使用！！！经多人测试，都会卡到安装选项无法进行下一步
+Pd虚拟机可以官方下载</p>
+
+<p>Centos7:
+https://cloud.189.cn/t/RnA36zfeE32m（访问码：tnl1）
+Centos8：
+https://cloud.189.cn/t/m2qQrqy63eeq（访问码：2dcx）</p>
+
+<p>pd下载最新版即可</p>
+
+<p>镜像请使用规定版本</p>
+
+<h2 id="一创建虚拟机">一、创建虚拟机</h2>
+
+<p>点击安装其他操作系统，然后将iso包拖入</p>
+
+<p><img src="/img/pd1.png" alt="" /></p>
+
+<p><img src="/img/pd2.png" alt="" /></p>
+
+<p>点击继续，后选中安装前设定（重要）后点击创建</p>
+
+<p><img src="/img/pd3.png" alt="" /></p>
+
+<p><img src="/img/pd4.png" alt="" /></p>
+
+<h2 id="二虚拟机配置">二、虚拟机配置</h2>
+
+<p>点击选项，优化中调整资源使用，建议为中</p>
+
+<p><img src="/img/pd5.png" alt="" /></p>
+
+<p>点击硬件cpu与内存调整处理器核心数与内存大小，根据自身需求进行调整</p>
+
+<p><img src="/img/pd6.png" alt="" /></p>
+
+<p>点击硬盘，点击高级，调整要分配的硬盘大小，注：这里是设置Linux系统最大可使用的硬盘容量，并不会直接将本机硬盘占用</p>
+
+<p><img src="/img/pd7.png" alt="" /></p>
+
+<p><img src="/img/pd9.png" alt="" /></p>
+
+<p><img src="/img/pd11.png" alt="" /></p>
+
+<p>调整为共享网络</p>
+
+<p><img src="/img/pd8.png" alt="" /></p>
+
+<p>初步配置完成，关闭配置页面点击继续</p>
+
+<h2 id="三安装配置">三、安装配置</h2>
+
+<p>开机后，选中第一项，回车等待即可</p>
+
+<p><img src="/img/pd12.png" alt="" /></p>
+
+<p>出现以下内容表示第一步成功，如果卡在其他什么奇怪的地方长时间没有反应，请点击左上方操作—重置，后重新开始安装</p>
+
+<p><img src="/img/pd13.png" alt="" /></p>
+
+<p>这里键盘输入r回车</p>
+
+<p>后点击数字5回车</p>
+
+<p><img src="/img/pd14.png" alt="" /></p>
+
+<p><img src="/img/pd15.png" alt="" /></p>
+
+<p>输入c回车</p>
+
+<p><img src="/img/pd16.png" alt="" /></p>
+
+<p>再次输入c回车</p>
+
+<p><img src="/img/pd17.png" alt="" /></p>
+
+<p>再次输入c回车，出现这一步表示成功</p>
+
+<p><img src="/img/pd18.png" alt="" /></p>
+
+<p><img src="/img/pd19.png" alt="" /></p>
+
+<p>输入7回车</p>
+
+<p><img src="/img/pd20.png" alt="" /></p>
+
+<p>输入2回车</p>
+
+<p><img src="/img/pd21.png" alt="" /></p>
+
+<p>键盘输入 7 回车，然后输入 8 回车，7和8的括号中全部出现x即成功</p>
+
+<p><img src="/img/pd22.png" alt="" /></p>
+
+<p>键盘输入 c 回车</p>
+
+<p><img src="/img/pd23.png" alt="" /></p>
+
+<p>键盘输入 c 回车</p>
+
+<p>7的括号出现x即成功，没有请输入r回车刷新，多次刷新依旧没有请重复7的设置</p>
+
+<p><img src="/img/pd24.png" alt="" /></p>
+
+<p><img src="/img/pd25.png" alt="" /></p>
+
+<p>输入8回车</p>
+
+<p><img src="/img/pd26.png" alt="" /></p>
+
+<p>设置密码，纯数字，6位，其他可能出错，牢记密码，每次开机需要</p>
+
+<p><img src="/img/pd27.png" alt="" /></p>
+
+<p>密码输入两次，密码不显示，是正常的</p>
+
+<p>然后输入yes回车</p>
+
+<p><img src="/img/pd28.png" alt="" /></p>
+
+<p>8括号中出现x即设置成功</p>
+
+<p><img src="/img/pd29.png" alt="" /></p>
+
+<p>输入4回车</p>
+
+<p>输入1回车</p>
+
+<p><img src="/img/pd30.png" alt="" /></p>
+
+<p>1的括号出现x则成功</p>
+
+<p>输入c回车</p>
+
+<p><img src="/img/pd31.png" alt="" /></p>
+
+<p>这里直接c</p>
+
+<p><img src="/img/pd32.png" alt="" /></p>
+
+<p>至此，除了9以外，其它的括号都变为x，如果有叹号出现，输入r刷新，重复几次即可变为x，刷新无效说明设置出错，那一条是叹号就点击对应数字重新返回对应步骤设置</p>
+
+<p>第9条为分组，不做设置，直接输入b 开始安装</p>
+
+<p><img src="/img/pd33.png" alt="" /></p>
+
+<p>耐心等待即可</p>
+
+<h2 id="四安装完成">四、安装完成</h2>
+
+<p>有人会卡到这里，请检查配置中的网络是否设置为共享主机网络，后点击操作，重置，重新开始</p>
+
+<p><img src="/img/pd34.png" alt="" /></p>
+
+<p>出现这个页面即安装全部完成，选择第一个选项的回车启动系统</p>
+
+<p><img src="/img/pd35.png" alt="" /></p>
+
+<p>login是root</p>
+
+<p>password是刚刚设置的6位密码，密码输入不显示，直接回车就进入系统了</p>
+
+<p><img src="/img/pd36.png" alt="" /></p>
+
+<p>这样就安装成功了，ping以下百度或者随便什么网站的网址，出现这样的即网络正常</p>
+
+<p>至此，安装过程全部完成</p>
+
+<p><img src="/img/pd37.png" alt="" /></p>
+:ET

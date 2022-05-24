@@ -1,0 +1,150 @@
+I"Y<h2 id="一字符串">一、字符串</h2>
+
+<h3 id="1切片">1、切片：</h3>
+
+<p>[开始：结束：步长]，左闭右开区间，默认步长为1</p>
+
+<h3 id="2find">2、find：</h3>
+
+<p>find(子串，开始位置，结束为止)</p>
+
+<p>判断某子串是否在字符串中，存在返回下标，没有返回-1，存在相同的，返回第一个</p>
+
+<h3 id="3rfind">3、rfind:</h3>
+
+<p>从右侧开始查找，返回下标依然从左计数</p>
+
+<h3 id="4index">4、index：</h3>
+
+<p>index(子串，开始位置，结束位置)</p>
+
+<p>判断某子串是否存在字符串中，存在返回下标，没有报错，存在相同的，返回第一个</p>
+
+<h3 id="5rindex">5、rindex:</h3>
+
+<p>从右侧开始查找，返回下标依然从左计数</p>
+
+<h3 id="6count">6、count：</h3>
+
+<p>count()，计数，返回字符串中字符个数</p>
+
+<h3 id="7rplace">7、rplace：</h3>
+
+<p>replace(旧子串，新子串，替换次数)</p>
+
+<p>替换次数如果超出出现次数，全部替换</p>
+
+<h3 id="8split">8、split：</h3>
+
+<p>split(分割字符，次数)</p>
+
+<p>分割，返回一个列表，分割字符将会被丢弃</p>
+
+<h3 id="9join">9、join：</h3>
+
+<p>将多个字符串合并为一个新的字符串</p>
+
+<h3 id="10capitalized">10、capitalized：</h3>
+
+<p>第一个字符串首字母大写</p>
+
+<h3 id="11title">11、title：</h3>
+
+<p>每个字符串首字母都大写</p>
+
+<h3 id="12lower">12、lower：</h3>
+
+<p>全部转小写</p>
+
+<h3 id="13upper">13、upper：</h3>
+
+<p>全部转大写</p>
+
+<h2 id="二列表">二、列表</h2>
+
+<p>1、列表里的数据可以是不同的数据类型</p>
+
+<p>2、index(数据，开始范围，结束范围)，返回指定数据的下标，没有报错</p>
+
+<p>3、len()返回列表的长度，统计元素个数</p>
+
+<p>4、in、not in，判断元素是否在列表里面，返回布尔值</p>
+
+<p>5、del，直接删除全部，也可以指定删除</p>
+
+<p>6、pop，可以删除指定下标的数据，默认是最后一个，删除并返回删除掉的数据</p>
+
+<p>7、remove，删除第一个匹配的数据</p>
+
+<p>8、clear，清空</p>
+
+<h2 id="三元组">三、元组</h2>
+
+<p>1、元组内的数据不支持修改</p>
+
+<p>2、tuple[下标]，查找数据</p>
+
+<p>3、index，返回数据的下标，没有就报错</p>
+
+<p>4、count，计数</p>
+
+<p>5、len，返回元组长度</p>
+
+<p>6、如果元组嵌套列表，可以修改列表中的数据</p>
+
+<h2 id="四字典">四、字典</h2>
+
+<p>1、以key，value的方式储存数据</p>
+
+<p>2、字典不支持下标，字典是可变类型</p>
+
+<p>3、字典的增加：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">dict</span><span class="p">[</span><span class="s">'key'</span><span class="p">]</span> <span class="o">=</span> <span class="s">'value'</span>  <span class="c1"># 如果key存在，就修改，不存在就添加
+</span></code></pre></div></div>
+
+<p>4、字典删除：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">del</span> <span class="nb">dict</span><span class="p">[</span><span class="s">'key'</span><span class="p">]</span>  <span class="c1"># 指定删除
+</span><span class="n">clear</span><span class="p">()</span>  <span class="c1"># 清空数据
+</span></code></pre></div></div>
+
+<p>5、keys，dict.keys()获取字典中全部的键，可迭代</p>
+
+<p>6、values，dict.values()获取字典中全部的值，可迭代</p>
+
+<h2 id="五集合">五、集合</h2>
+
+<p>1、集合最大的特点就是可以去重</p>
+
+<p>2、集合内的数据都是无序的</p>
+
+<p>3、创建空集合，set()</p>
+
+<p>4、集合添加数据：add()增加单个数据，update()增加的是一个序列，或者说一个列表</p>
+
+<p>5、集合删除数据：remove()删除指定数据，pop()随机删除并返回删除的数据</p>
+
+<p>字符串、元组、列表都支持 + 合并</p>
+
+<p>字符串、元组、列表都支持 * 复制</p>
+
+<h2 id="六列表推导式">六、列表推导式</h2>
+
+<p>[列表中要返回的数据 for i in range()]</p>
+
+<p>[列表中要返回的数据 for i in range() if i%2 == 0]</p>
+
+<h2 id="七字典推导式">七、字典推导式</h2>
+
+<p>{key:value for key,value in dict1 if key.islower()}</p>
+
+<p>两个列表合成一个字典：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">List1</span> <span class="o">=</span> <span class="p">[</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,]</span>
+<span class="n">List2</span> <span class="o">=</span> <span class="p">[</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,</span> <span class="p">,]</span>
+<span class="nb">dict</span> <span class="o">=</span> <span class="p">{</span><span class="n">list1</span><span class="p">[</span> <span class="n">i</span> <span class="p">]:</span><span class="n">list2</span><span class="p">[</span> <span class="n">i</span> <span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">list1</span><span class="p">))}</span>  
+</code></pre></div></div>
+
+<p>如果两个列表长度相同，len统计任何一个列表就可以，长度不同，统计多的就会报错。统计少的不会</p>
+:ET
