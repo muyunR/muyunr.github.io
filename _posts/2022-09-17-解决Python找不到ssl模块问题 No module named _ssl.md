@@ -1,11 +1,11 @@
 ---
 layout: post
 title: 解决Python找不到ssl模块问题 No module named _ssl
-tags:  linux
+tags: Python
 image: 07.jpg
 ---
 
-## python安装完毕后，提示找不到ssl模块：
+## python 安装完毕后，提示找不到 ssl 模块：
 
 ```shell
 >>> import ssl
@@ -19,7 +19,7 @@ ImportError: No module named _ssl
 
 ### 解决方法：
 
-1. 查看openssl安装包，发现缺少openssl-devel包
+1. 查看 openssl 安装包，发现缺少 openssl-devel 包
 
 ```shell
 $ rpm -aq|grep openssl
@@ -27,7 +27,7 @@ $ rpm -aq|grep openssl
     openssl-0.9.8e-20.el5
 ```
 
-2. yum安装openssl-devel
+2. yum 安装 openssl-devel
 
 ```shell
 $ yum install openssl-devel -y
@@ -36,8 +36,8 @@ $ rpm -aq|grep openssl  #查看安装结果
     openssl-1.0.1e-57.el6.x86_64
 ```
 
-3. 重新编译python
-   修改Setup文件
+3. 重新编译 python
+   修改 Setup 文件
 
 ```shell
 vi /src/Python-2.7.15/Modules/Setup
@@ -62,8 +62,6 @@ $ cd python-3.10.7
 $ make
 $ make install
 ```
-
-
 
 5. 测试，已可正常使用。
 

@@ -1,7 +1,7 @@
 ---
 layout: post
 title: python操作MongoDB
-tags: Linux
+tags: Python
 image: 06.jpg
 ---
 

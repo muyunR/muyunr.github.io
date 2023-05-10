@@ -1,11 +1,11 @@
 ---
 layout: post
 title: Linus服务器后台运行python程序输出以及查看日志文件
-tags:  Linux
+tags: Linux
 image: 03.jpg
 ---
 
-## Linux服务器后台运行python
+## Linux 服务器后台运行 python
 
 ```shell
 nohup python -u test.py > test.log 2>&1 &
@@ -13,11 +13,11 @@ nohup python -u test.py > test.log 2>&1 &
 
 最后的 & 表示后台运行
 
- ‘>’ 表示日志输出重定向
+‘>’ 表示日志输出重定向
 
-Linux默认定义两个变量：2错误输出，1标配输出
+Linux 默认定义两个变量：2 错误输出，1 标配输出
 
-注意：1前面的 & 一定添加，否则回多余创建一个名为1的文件
+注意：1 前面的 & 一定添加，否则回多余创建一个名为 1 的文件
 
 ## 实时查看日志文件
 
@@ -25,7 +25,7 @@ Linux默认定义两个变量：2错误输出，1标配输出
 tail -f test.log
 ```
 
-## 查看后台运行的python程序
+## 查看后台运行的 python 程序
 
 ```shell
 ps -ef|grep python
@@ -36,4 +36,3 @@ ps -ef|grep python
 ```shell
 kill -s 9 进程id
 ```
-
