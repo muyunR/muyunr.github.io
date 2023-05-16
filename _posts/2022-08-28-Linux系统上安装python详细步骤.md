@@ -92,3 +92,46 @@ source /etc/profile
 ```
 
 安装完成
+
+#### 4、报错解决
+
+问题 1:
+
+```shell
+configure: error: in `/root/MuYun/Python-3.10.3':
+configure: error: no acceptable C compiler found in $PATHe
+```
+
+问题分析：在 ./configure --prefix=/muyun/python3.10 这一步出现这个错误，说明当前系统缺少 gcc 编译环境，
+解决方法：yum -y install gcc，然后重新运行即可
+
+问题 2:
+
+```shell
+/root/MuYun/Python-3.11.3/Modules/_ctypes/_ctypes.c:118:10: fatal error: ffi.h: No such file or directory
+  118 | #include <ffi.h>
+      |          ^~~~~~~
+compilation terminated.
+
+The necessary bits to build these optional modules were not found:
+```
+
+问题分析：当前系统缺少 libffi-devel
+解决方法：yum install libffi-devel
+
+问题 3:在 make 时候出现一下错误
+
+```shell
+The necessary bits to build these optional modules were not found:
+_bz2                  _curses               _curses_panel
+_dbm                  _gdbm                 _hashlib
+_lzma                 _ssl                  _tkinter
+_uuid                 nis                   readline
+zlib
+To find the necessary bits, look in setup.py in detect_modules() for the module's name.
+```
+
+问题分析：缺少这一堆模块，其中有一部分是本身我们不需要的，不需要去管它，但是有一些关键的模块，例如 ssl
+问题解决：sudo yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel
+make clean
+make
